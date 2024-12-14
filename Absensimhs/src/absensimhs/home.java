@@ -7,7 +7,7 @@ public class home {
     // Method untuk menampilkan halaman home
     public static void showHomePage() {
         // Frame untuk halaman home
-        JFrame homeFrame = new JFrame("Home Page");
+        JFrame homeFrame = new JFrame("Home Laman");
         homeFrame.setSize(800, 600); // Ukuran frame home
         homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         homeFrame.setLayout(new BorderLayout()); // Layout BorderLayout
