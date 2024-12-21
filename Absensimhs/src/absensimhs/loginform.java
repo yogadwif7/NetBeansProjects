@@ -5,18 +5,18 @@ import java.awt.event.*;
 public class loginform {
 
     public static void main(String[] args) {
-        // Show the login page initially
+        // Menampilkan halaman login
         showLoginPage();
     }
 
-    // Method to display the login page
+    // Method untuk menampilkan halaman login
     public static void showLoginPage() {
         // Frame utama untuk login
         JFrame frame = new JFrame("Login Page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        // Panel utama dengan GridBagLayout untuk memastikan tabel login tetap di tengah
+        // Panel utama dengan GridBagLayout
         JPanel panel = new JPanel(new GridBagLayout()); // Deklarasi dan inisialisasi panel
         panel.setBackground(new Color(144, 238, 144)); // Hijau muda
         frame.add(panel, BorderLayout.CENTER);
@@ -54,7 +54,7 @@ public class loginform {
         passwordField.setBounds(20, 150, 230, 30);
         loginPanel.add(passwordField);
 
-        // Tombol Show/Hide Password dengan ikon mata
+        // Ikon untuk Show/Hide Password
         ImageIcon eyeClosedIcon = new ImageIcon("C:\\Users\\Yoga\\Documents\\NetBeansProjects\\Absensimhs\\src\\img\\ClosedEye.png");
         ImageIcon eyeOpenIcon = new ImageIcon("C:\\Users\\Yoga\\Documents\\NetBeansProjects\\Absensimhs\\src\\img\\Eye.png");
         JButton togglePasswordButton = new JButton(eyeClosedIcon);
@@ -66,14 +66,14 @@ public class loginform {
 
         // Fitur Show/Hide Password
         togglePasswordButton.addActionListener(e -> {
-            boolean isPasswordVisible = passwordField.getEchoChar() == 0;
-            passwordField.setEchoChar(isPasswordVisible ? '\u25CF' : (char) 0);
-            togglePasswordButton.setIcon(isPasswordVisible ? eyeClosedIcon : eyeOpenIcon);
+            boolean isPasswordVisible = passwordField.getEchoChar() == '\u0000'; // Cek apakah password terlihat
+            passwordField.setEchoChar(isPasswordVisible ? '\u25CF' : '\u0000'); // Jika terlihat, sembunyikan dengan karakter '●'
+            togglePasswordButton.setIcon(isPasswordVisible ? eyeClosedIcon : eyeOpenIcon); // Ganti ikon sesuai status
         });
 
         // Tombol Login Semi Persegi Panjang
         JButton loginButton = new RoundedButton("Login");
-        loginButton.setBounds(70, 220, 150, 50); // Ukuran dan posisi tombol
+        loginButton.setBounds(80, 230, 150, 40); // Ukuran dan posisi tombol
         loginButton.setForeground(Color.WHITE);
         loginButton.setFont(new Font("Arial", Font.BOLD, 16));
         loginButton.setBackground(new Color(60, 179, 113)); // Warna hijau
@@ -82,40 +82,53 @@ public class loginform {
 
         // Aksi Tombol Login
         loginButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, "Login Berhasil!");
-            frame.dispose(); // Close login page
+            String username = usernameField.getText().trim(); // Ambil input username
+            String password = new String(passwordField.getPassword()).trim(); // Ambil input password
 
-            // Pindahkan ke halaman home setelah login berhasil
-            home.showHomePage();  // Panggil metode untuk menampilkan halaman home
+            // Validasi login
+            if (username.equals("yoga") && password.equals("123")) {
+                JOptionPane.showMessageDialog(frame, "Login Berhasil! Anda adalah Mahasiswa.");
+                frame.dispose();
+                Home.showHomePage("Mahasiswa"); // Panggil halaman home dengan parameter "Mahasiswa"
+            } else if (username.equals("andre") && password.equals("321")) {
+                JOptionPane.showMessageDialog(frame, "Login Berhasil! Anda adalah Dosen.");
+                frame.dispose();
+                Home.showHomePage("Dosen"); // Panggil halaman home dengan parameter "Dosen"
+            } else if (!username.equals("yoga") && !username.equals("andre") && !password.equals("123") && !password.equals("321")) {
+                JOptionPane.showMessageDialog(frame, "Username dan Password salah!", "Login Gagal", JOptionPane.ERROR_MESSAGE);
+            } else if (!username.equals("yoga") && !username.equals("andre")) {
+                JOptionPane.showMessageDialog(frame, "Username salah!", "Login Gagal", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Password salah!", "Login Gagal", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         // Forgot Password Link
-        JLabel forgotPasswordLabel = new JLabel("<HTML><U>Lupa Password?</U></HTML>");
+        JLabel forgotPasswordLabel = new JLabel("<HTML>Lupa Password?</HTML>");
         forgotPasswordLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         forgotPasswordLabel.setForeground(Color.BLUE);
         forgotPasswordLabel.setBounds(180, 185, 100, 20); // Below the password field
+        forgotPasswordLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         forgotPasswordLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(frame, "Redirecting to Forgot Password Page...");
+                frame.dispose();
+                SignUpForm.showResetPasswordForm(); // Memanggil form Reset Password
             }
         });
         loginPanel.add(forgotPasswordLabel);
 
-        // Link "Don't have an account?" (Center link)
-        JLabel signUpLabel = new JLabel("<HTML><U>Don't have an account?</U></HTML>");
+        // Link "Don't have an account?"
+        JLabel signUpLabel = new JLabel("<HTML>Don't have an account?</HTML>");
         signUpLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         signUpLabel.setForeground(Color.BLUE);
-        
-        // Dynamically center the "Don't have an account?" label
-        Dimension size = signUpLabel.getPreferredSize();
-        int signUpX = (loginPanel.getWidth() - size.width) / 2; // Center the label horizontally based on its width
-        signUpLabel.setBounds(80, 280, 170, 40);
-        
+        signUpLabel.setBounds(90, 280, 150, 20); // Letak link di bawah tombol login
+        signUpLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         signUpLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(frame, "Redirecting to Sign-Up Page...");
+                frame.dispose();
+                SignUpForm.showSignUpForm(); // Panggil halaman Sign-Up
             }
         });
         loginPanel.add(signUpLabel);
